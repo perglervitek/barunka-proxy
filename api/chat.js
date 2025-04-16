@@ -39,7 +39,7 @@ export const config = {
           temperature: 0.7
         })
       });
-  
+      console.info("openaiRes", openaiRes);
       const data = await openaiRes.json();
   
       if (!data.choices || !data.choices[0]) {
