@@ -12,10 +12,12 @@ export default async function handler(req, res) {
     }
   
     try {
-      const { prompt } = req.body; // <-- NEVOLÁME JSON.parse(req.body)
+      // ručně přečteme tělo requestu
+      const rawBody = await req.text();
+      const { prompt } = JSON.parse(rawBody);
   
       if (!prompt) {
-        return res.status(400).json({ error: 'Missing prompt in request body' });
+        return res.status(400).json({ error: 'Missing prompt' });
       }
   
       const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -39,7 +41,7 @@ export default async function handler(req, res) {
   
       res.status(200).json({ reply: data.choices[0].message.content });
     } catch (err) {
-      console.error('Error processing request:', err);
+      console.error('CHYBA:', err);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   }
